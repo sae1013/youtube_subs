@@ -1,6 +1,5 @@
 import { ByProdCountry } from '../../common';
 
-// export const ORIGINAL_PRODUCT_ID: number = 12650488610;
 export const ORIGINAL_PRODUCT_ID: ByProdCountry<number> = {
   itunes: {
     india: 12650488610,
@@ -63,24 +62,6 @@ export const OPTION_COMBINATIONS: ByProdCountry<OptionCombination[]> = {
         optionName1: '585 루피',
         sellerManagerCode: 'option4',
       },
-      // {
-      //   id: 53712097202,
-      //   stockQuantity: 5,
-      //   optionValue: '1170',
-      //   price: 23200,
-      //   usable: true,
-      //   optionName1: '1170 루피',
-      //   sellerManagerCode: 'option5',
-      // },
-      // {
-      //   id: 53712097203,
-      //   stockQuantity: 2,
-      //   price: 48900,
-      //   optionValue: '2340',
-      //   usable: true,
-      //   optionName1: '2340 루피',
-      //   sellerManagerCode: 'option6',
-      // },
       {
         id: 54254624005,
         stockQuantity: 10,
@@ -91,6 +72,15 @@ export const OPTION_COMBINATIONS: ByProdCountry<OptionCombination[]> = {
         sellerManagerCode: 'option7',
       },
       {
+        id: 54436350097,
+        stockQuantity: 5,
+        optionValue: '1170',
+        price: 23200,
+        usable: true,
+        optionName1: '1170 루피',
+        sellerManagerCode: 'option5',
+      },
+      {
         id: 54254624006,
         stockQuantity: 5,
         price: 41500,
@@ -98,6 +88,15 @@ export const OPTION_COMBINATIONS: ByProdCountry<OptionCombination[]> = {
         optionValue: '2000',
         optionName1: '2000 루피',
         sellerManagerCode: 'option8',
+      },
+      {
+        id: 54429911185,
+        stockQuantity: 2,
+        price: 49000,
+        optionValue: '2340',
+        usable: true,
+        optionName1: '2340 루피',
+        sellerManagerCode: 'option6',
       },
       {
         id: 54348085853,
