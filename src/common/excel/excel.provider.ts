@@ -26,11 +26,16 @@ export interface ExcelReader {
   sheets?: sheets_v4.Sheets;
 
   readRows<T extends ExcelRow = ExcelRow>(
-    filePath?: string,
-    options?: ExcelReadOptions,
+    spreadSheetId: string,
+    options: ExcelReadOptions,
   ): Promise<T[]>;
 
-  writeRows(targetRow: number, ...args): Promise<number>;
+  writeRows(
+    targetRow: number,
+    spreadsheetId: string,
+    options,
+    ...args
+  ): Promise<number>;
 }
 
 export const EXCEL_READER = Symbol('EXCEL_READER');
@@ -48,31 +53,35 @@ export const excelReaderProvider: Provider = {
         ?.replace(/\\n/g, '\n'),
       scopes: SHEETS_SCOPES,
     });
-
-    const prodType = configService.get<string>('PRODUCT_TYPE') as ProductType;
-    const country = configService.get<string>('COUNTRY') as Country<
-      typeof prodType
-    >;
-    const spreadsheetId = EXCEL_URL_BY_PROD_COUNTRY[prodType][country];
     const sheets = google.sheets({
       version: 'v4',
       auth,
     });
 
-    const readRows = async <T extends ExcelRow = ExcelRow>() => {
+    const readRows = async <T extends ExcelRow = ExcelRow>(
+      spreadSheetId: string,
+      options,
+    ) => {
       const context = await sheets.spreadsheets.values.get({
-        spreadsheetId: spreadsheetId,
-        range: '시트1!A2:C', // 시트 범위도 추후 수정
+        spreadsheetId: spreadSheetId,
+        // range: '시트1!A2:C', // 시트 범위도 추후 수정
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        range: options?.range || '',
       });
 
       const rows = (context.data.values ?? []) as unknown as T[]; // 2차원 배열
       return rows;
     };
 
-    const writeRows = async (targetRow: number, ...args) => {
+    const writeRows = async (
+      targetRow: number,
+      spreadSheetId: string,
+      options,
+      ...args
+    ) => {
       try {
         const response = await sheets.spreadsheets.values.update({
-          spreadsheetId: spreadsheetId,
+          spreadsheetId: spreadSheetId,
           range: `시트1!C${targetRow + 2}:G${targetRow + 2}`,
           valueInputOption: 'USER_ENTERED',
           requestBody: {

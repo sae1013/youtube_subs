@@ -13,12 +13,13 @@ import {
   SmartstoreResponse,
   OrderInfo,
 } from './types';
-import { parseProductOption } from '../common/utils';
+import { getProdAndCountryByString, parseProductOption } from '../common/utils';
 import { GMAIL_MAILER } from 'src/common/email/gmail.provider';
 // import { genHtmlTemplate } from 'src/common/email/templates/template1';
 import * as crypto from 'crypto';
-import { ORIGINAL_PRODUCT_ID } from '../stock/const/optionMapper';
 import { Country, ProductType } from '../common';
+import { ProductConfigService } from '../product-config/product-config.service';
+import { EXCEL_URL_BY_PROD_COUNTRY } from '../common/excel/variables';
 
 @Injectable()
 export class OrdersService {
@@ -28,14 +29,15 @@ export class OrdersService {
 
   constructor(
     private readonly configService: ConfigService,
+    private readonly productConfigService: ProductConfigService,
     @Inject(AXIOS_INSTANCE) private readonly http: AxiosInstance,
     @Inject(EXCEL_READER) private readonly excelReader: ExcelReader,
     @Inject(GMAIL_MAILER) private readonly gmailMailer: GmailMailer,
   ) {
-    this.prodType = this.configService.get('PRODUCT_TYPE') as ProductType;
-    this.country = this.configService.get('COUNTRY') as Country<
-      typeof this.prodType
-    >;
+    // this.prodType = this.configService.get('PRODUCT_TYPE') as ProductType;
+    // this.country = this.configService.get('COUNTRY') as Country<
+    //   typeof this.prodType
+    // >;
   }
 
   /**
@@ -46,8 +48,8 @@ export class OrdersService {
     const productOrderIdList: string[] = [];
 
     // STEP 1
-    // 최근 주문목록들의 주문 ID 배열을 가져온다
-    const paidOrderIds = await this.findLastChangedOrders();
+    // 최근 결제된 주문 ID 배열을 가져온다
+    const paidOrderIds = await this.findLastChangedPaidOrders();
 
     if (paidOrderIds.length < 1) {
       return;
@@ -55,10 +57,14 @@ export class OrdersService {
 
     // STEP 2
     // 결제된 항목들의 Order List를 가져온다.
-    const ordersInfo: OrderDetail[] = await this.getOrdersInfo(
-      paidOrderIds,
-      String(ORIGINAL_PRODUCT_ID[this.prodType][this.country]),
-    );
+    // const originalProductId = String(
+    //   this.productConfigService.getOriginalProductId(
+    //     this.prodType,
+    //     this.country,
+    //   ),
+    // );
+    // 상세데이터 조회
+    const ordersInfo: OrderDetail[] = await this.getOrdersInfo(paidOrderIds);
     console.log('ordersInfo:', ordersInfo);
     if (ordersInfo.length < 1) return;
     // STEP 3
@@ -72,14 +78,25 @@ export class OrdersService {
         productOption,
         productOrderId,
         shippingAddress: { tel1 },
+        originalProductId,
       } = orderInfo.productOrder;
+
+      // const [prod, country]: [ProductType, Country<typeof this.prodType>] =
+      //   getProdAndCountryByString(
+      //     this.productConfigService.getSnapshot().PRODUCT_BY_KEY[
+      //       originalProductId
+      //     ],
+      //   );
       const { amount, unit } = parseProductOption(productOption);
 
       let redeemCd = '';
+      const spreadsheetId = EXCEL_URL_BY_PROD_COUNTRY[prod][country] || '';
 
       for (let i = 0; i < quantity; i++) {
         // 엑셀에서 가져온 row 데이터.
-        const rows = await this.excelReader.readRows();
+        const rows = await this.excelReader.readRows(spreadsheetId, {
+          range: '시트1!A2:C',
+        });
         // 보낼 상품의 타겟 행
         const targetRow = rows.findIndex((row) => {
           const rowAmt = row[0] as string;
@@ -108,6 +125,8 @@ export class OrdersService {
         try {
           await this.excelReader.writeRows(
             targetRow,
+            spreadsheetId,
+            {},
             'y',
             '이메일 없음',
             ordererName,
@@ -123,7 +142,7 @@ export class OrdersService {
     await this.postDeliveryProducts(productOrderIdList);
   }
 
-  async findLastChangedOrders(): Promise<string[]> {
+  async findLastChangedPaidOrders(): Promise<string[]> {
     const params = {
       lastChangedFrom: this.getLastChangedFrom(180),
     };
@@ -150,14 +169,10 @@ export class OrdersService {
   }
 
   /**
-   * 상품 상세조회
+   * 주문된 상품 상세조회
    * @param productOrderIds
-   * @param originalProductId 원상품번호
    */
-  async getOrdersInfo(
-    productOrderIds: string[],
-    originalProductId: string,
-  ): Promise<OrderDetail[] | []> {
+  async getOrdersInfo(productOrderIds: string[]): Promise<OrderDetail[] | []> {
     const payload = {
       productOrderIds,
     };
@@ -171,10 +186,7 @@ export class OrdersService {
           },
         },
       );
-      const orders = response.data.data || [];
-      return orders.filter((order) => {
-        return order.productOrder.originalProductId === originalProductId;
-      });
+      return response.data.data || [];
     } catch (err) {
       console.error(err);
       return [];

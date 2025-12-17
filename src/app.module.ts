@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { JobsModule } from './jobs/jobs.module';
 import { StockModule } from './stock/stock.module';
 import { ExcelModule } from './common/excel/excel.module';
+import { ProductConfigModule } from './product-config/product-config.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ExcelModule } from './common/excel/excel.module';
     AuthModule,
     JobsModule,
     ExcelModule,
+    ProductConfigModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,129 @@
+{
+  "12650488610": {
+    "name": "앱스토어 인도 기프트카드",
+    "spreadsheetId": "1QHdgdW6bAVw6EDcTC3odAeVSyq9vONBPJU47-pMwt-8",
+    "originalProdId": 12650488610,
+    "isGroupProd": false,
+    "base_price": 3000,
+    "discount": 500,
+    "unit": "루피",
+    "option_combinations": [
+      {
+        "id": 53712097198,
+        "stockQuantity": 100,
+        "price": 0,
+        "usable": true,
+        "optionValue": "100",
+        "optionName1": "100 루피",
+        "optionMgCd": "option1"
+      },
+      {
+        "id": 53712097199,
+        "stockQuantity": 9,
+        "optionValue": "195",
+        "price": 2370,
+        "usable": true,
+        "optionName1": "195 루피",
+        "optionMgCd": "option2"
+      },
+      {
+        "id": 53712097200,
+        "stockQuantity": 4,
+        "optionValue": "389",
+        "price": 7200,
+        "usable": true,
+        "optionName1": "389 루피",
+        "optionMgCd": "option3"
+      },
+      {
+        "id": 53712097201,
+        "stockQuantity": 6,
+        "optionValue": "585",
+        "price": 12000,
+        "usable": true,
+        "optionName1": "585 루피",
+        "optionMgCd": "option4"
+      },
+      {
+        "id": 54254624005,
+        "stockQuantity": 10,
+        "price": 19500,
+        "usable": true,
+        "optionValue": "1000",
+        "optionName1": "1000 루피",
+        "optionMgCd": "option7"
+      },
+      {
+        "id": 54436350097,
+        "stockQuantity": 5,
+        "optionValue": "1170",
+        "price": 23200,
+        "usable": true,
+        "optionName1": "1170 루피",
+        "optionMgCd": "option5"
+      },
+      {
+        "id": 54254624006,
+        "stockQuantity": 5,
+        "price": 41500,
+        "usable": true,
+        "optionValue": "2000",
+        "optionName1": "2000 루피",
+        "optionMgCd": "option8"
+      },
+      {
+        "id": 54429911185,
+        "stockQuantity": 2,
+        "price": 49000,
+        "optionValue": "2340",
+        "usable": true,
+        "optionName1": "2340 루피",
+        "optionMgCd": "option6"
+      },
+      {
+        "id": 54348085853,
+        "stockQuantity": 3,
+        "price": 50600,
+        "usable": true,
+        "optionValue": "2500",
+        "optionName1": "2500 루피",
+        "optionMgCd": "option9"
+      }
+    ]
+  },
+  "12752749402": {
+    "name": "앱스토어 터키 기프트카드",
+    "spreadsheetId": "1jL_0Yk3duNGNfOc21uP3GgioPVaEzxWet5p9Qp1MLB0",
+    "originalProdId": 12752749402,
+    "isGroupProd": false,
+    "base_price": 4400,
+    "discount": 0,
+    "unit": "리라",
+    "option_combinations": [
+      {
+        "id": 54350439805,
+        "price": 0,
+        "usable": true,
+        "optionValue": "100",
+        "optionName1": "100 리라",
+        "optionMgCd": "option1"
+      },
+      {
+        "id": 54350439807,
+        "price": 17600,
+        "usable": true,
+        "optionValue": "500",
+        "optionName1": "500 리라",
+        "optionMgCd": "option2"
+      },
+      {
+        "id": 54350439809,
+        "price": 39500,
+        "usable": true,
+        "optionValue": "1000",
+        "optionName1": "1000 리라",
+        "optionMgCd": "option3"
+      }
+    ]
+  }
+}

@@ -25,3 +25,7 @@ export const parseProductOption = (optionText: string) => {
 
   return { amount, unit };
 };
+
+export const getProdAndCountryByString = (str: string) => {
+  return str.split(':');
+};

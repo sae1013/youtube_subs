@@ -4,18 +4,15 @@ import { AXIOS_INSTANCE } from '../common/http/axios.provider';
 import type { AxiosInstance } from 'axios';
 import type { ExcelReader } from '../common/excel/excel.provider';
 import { EXCEL_READER } from '../common/excel/excel.provider';
-import {
-  BASE_PRICE,
-  createOptionMapperByValue,
-  OPTION_COMBINATIONS,
-  ORIGINAL_PRODUCT_ID,
-} from './const/optionMapper';
+import { createOptionMapperByValue } from './const/optionMapper';
 import { Country, ProductType } from '../common';
+import { ProductConfigService } from '../product-config/product-config.service';
 
 @Injectable()
 export class StockService {
   constructor(
     private readonly configService: ConfigService,
+    private readonly productConfigService: ProductConfigService,
     @Inject(AXIOS_INSTANCE) private readonly http: AxiosInstance,
     @Inject(EXCEL_READER) private readonly excelReader: ExcelReader,
   ) {}
@@ -47,14 +44,20 @@ export class StockService {
       typeof productType
     >;
     // 1) 해당 상품/국가에 대한 옵션 리스트 가져오기
-    const optionCombinations = OPTION_COMBINATIONS[productType][country]; // 재고 맵
+    const optionCombinations = this.productConfigService.getOptionCombinations(
+      productType,
+      country,
+    ); // 재고 맵
 
     const optionMapperByValue = createOptionMapperByValue(optionCombinations);
-    const originalProductId = ORIGINAL_PRODUCT_ID[productType][country];
+    const originalProductId = this.productConfigService.getOriginalProductId(
+      productType,
+      country,
+    );
 
     const bodyParam = {
       productSalePrice: {
-        salePrice: BASE_PRICE[productType][country],
+        salePrice: this.productConfigService.getBasePrice(productType, country),
       },
       optionInfo: {
         optionCombinations: Array.from(optionStockTable).map(([k, v]) => {
