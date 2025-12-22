@@ -64,8 +64,6 @@ export const excelReaderProvider: Provider = {
     ) => {
       const context = await sheets.spreadsheets.values.get({
         spreadsheetId: spreadSheetId,
-        // range: '시트1!A2:C', // 시트 범위도 추후 수정
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         range: options?.range || '',
       });
 

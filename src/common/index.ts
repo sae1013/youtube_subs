@@ -18,3 +18,5 @@ export type ByProdCountry<T> = {
     [C in Country<P>]: T;
   };
 };
+
+export const DEFAULT_RANGE = '시트1!A2:C';

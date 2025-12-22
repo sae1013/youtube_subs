@@ -17,9 +17,11 @@ import { getProdAndCountryByString, parseProductOption } from '../common/utils';
 import { GMAIL_MAILER } from 'src/common/email/gmail.provider';
 // import { genHtmlTemplate } from 'src/common/email/templates/template1';
 import * as crypto from 'crypto';
-import { Country, ProductType } from '../common';
+import { Country, DEFAULT_RANGE, ProductType } from '../common';
 import { ProductConfigService } from '../product-config/product-config.service';
 import { EXCEL_URL_BY_PROD_COUNTRY } from '../common/excel/variables';
+
+type S3ProdInfoByKeyMap = Record<string, any>;
 
 @Injectable()
 export class OrdersService {
@@ -30,14 +32,12 @@ export class OrdersService {
   constructor(
     private readonly configService: ConfigService,
     private readonly productConfigService: ProductConfigService,
+    private readonly S3ProdInfoByKey: S3ProdInfoByKeyMap,
     @Inject(AXIOS_INSTANCE) private readonly http: AxiosInstance,
     @Inject(EXCEL_READER) private readonly excelReader: ExcelReader,
     @Inject(GMAIL_MAILER) private readonly gmailMailer: GmailMailer,
   ) {
-    // this.prodType = this.configService.get('PRODUCT_TYPE') as ProductType;
-    // this.country = this.configService.get('COUNTRY') as Country<
-    //   typeof this.prodType
-    // >;
+    this.S3ProdInfoByKey = productConfigService.getSnapshot();
   }
 
   /**
@@ -56,55 +56,47 @@ export class OrdersService {
     }
 
     // STEP 2
-    // 결제된 항목들의 Order List를 가져온다.
-    // const originalProductId = String(
-    //   this.productConfigService.getOriginalProductId(
-    //     this.prodType,
-    //     this.country,
-    //   ),
-    // );
-    // 상세데이터 조회
+    // productId 를 이용하여 오더정보를 가져온다.
     const ordersInfo: OrderDetail[] = await this.getOrdersInfo(paidOrderIds);
     console.log('ordersInfo:', ordersInfo);
     if (ordersInfo.length < 1) return;
-    // STEP 3
-    // orders info 를 순회하면서, 엑셀파일을 읽고 해당 하는 상품이 있는 경우 메일을 발송한다.
-    // 만약 수량이 부족하면 관리자에게 메일을 보낸다.
 
+    // STEP 3
+    // orders info 를 순회하면서, 엑셀파일을 읽고 해당 하는 상품이 있는 경우 문자를 발송한다.
     for (const orderInfo of ordersInfo) {
       const { ordererName, ordererId } = orderInfo.order;
       const {
         quantity,
         productOption,
+        optionManageCode, // 옵션별칭
         productOrderId,
         shippingAddress: { tel1 },
         originalProductId,
       } = orderInfo.productOrder;
 
-      // const [prod, country]: [ProductType, Country<typeof this.prodType>] =
-      //   getProdAndCountryByString(
-      //     this.productConfigService.getSnapshot().PRODUCT_BY_KEY[
-      //       originalProductId
-      //     ],
-      //   );
-      const { amount, unit } = parseProductOption(productOption);
+      //TODO: 금액 , 단위 따로 뽑아오기
+      // const { amount, unit } = parseProductOption(productOption);
 
       let redeemCd = '';
-      const spreadsheetId = EXCEL_URL_BY_PROD_COUNTRY[prod][country] || '';
+
+      const spreadsheetId =
+        this.S3ProdInfoByKey[originalProductId]?.spreadsheetId || '';
 
       for (let i = 0; i < quantity; i++) {
         // 엑셀에서 가져온 row 데이터.
         const rows = await this.excelReader.readRows(spreadsheetId, {
-          range: '시트1!A2:C',
+          range: DEFAULT_RANGE,
         });
         // 보낼 상품의 타겟 행
         const targetRow = rows.findIndex((row) => {
-          const rowAmt = row[0] as string;
-          redeemCd = row[1] as string;
-          const useYn = row[2] as string;
-
+          const rowAmt = row[0] as string; // 양 ex.100
+          redeemCd = row[1] as string; // 코드
+          const useYn = row[2] as string; // 사용여부
+          const rowOptionCode = row[3] as string; // 옵션 아이디
           return (
-            rowAmt === amount && useYn.toLowerCase() === 'n' && redeemCd.trim()
+            String(optionManageCode) === String(rowOptionCode) &&
+            useYn.toLowerCase() === 'n' &&
+            redeemCd.trim()
           );
         });
 
