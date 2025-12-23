@@ -67,7 +67,7 @@ export class OrdersService {
       const { ordererName, ordererId } = orderInfo.order;
       const {
         quantity,
-        productOption,
+        // productOption,
         optionManageCode, // 옵션별칭
         productOrderId,
         shippingAddress: { tel1 },
@@ -75,30 +75,35 @@ export class OrdersService {
       } = orderInfo.productOrder;
 
       //TODO: 금액 , 단위 따로 뽑아오기
-      // const { amount, unit } = parseProductOption(productOption);
-
-      let redeemCd = '';
+      const unit = this.S3ProdInfoByKey[originalProductId]?.unit;
 
       const spreadsheetId =
         this.S3ProdInfoByKey[originalProductId]?.spreadsheetId || '';
 
+      // 주문갯수에따라 순회
       for (let i = 0; i < quantity; i++) {
         // 엑셀에서 가져온 row 데이터.
         const rows = await this.excelReader.readRows(spreadsheetId, {
           range: DEFAULT_RANGE,
         });
         // 보낼 상품의 타겟 행
-        const targetRow = rows.findIndex((row) => {
-          const rowAmt = row[0] as string; // 양 ex.100
-          redeemCd = row[1] as string; // 코드
-          const useYn = row[2] as string; // 사용여부
-          const rowOptionCode = row[3] as string; // 옵션 아이디
+        const targetRowIdx = rows.findIndex((row) => {
+          const redeemCd = row[1]; // 코드
+          const useYn = row[2]; // 사용여부
+          const rowOptionCode = row[3]; // 옵션 아이디 , 기존에는 이메일 이었는데 한칸 미루기
+
+          // 주문들어온 옵션과 타겟의 옵션코드를보고 사용n이면 리턴
           return (
             String(optionManageCode) === String(rowOptionCode) &&
             useYn.toLowerCase() === 'n' &&
             redeemCd.trim()
           );
         });
+
+        // 상품이 품절이면 리턴
+        if (targetRowIdx < 0) return;
+
+        const [amount, redeemCd, useYn, rowOptionCode] = rows[targetRowIdx]; // 대상 상품 / 양, 코드, 사용여부, 옵션코드
 
         // 문자발송
         try {
@@ -116,10 +121,11 @@ export class OrdersService {
         // 엑셀 업데이트
         try {
           await this.excelReader.writeRows(
-            targetRow,
+            targetRowIdx,
             spreadsheetId,
             {},
             'y',
+            rowOptionCode,
             '이메일 없음',
             ordererName,
             tel1,

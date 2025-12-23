@@ -12,9 +12,7 @@ export type ExcelCellValue =
   | null
   | undefined;
 
-export interface ExcelRow {
-  [column: string]: ExcelCellValue;
-}
+export type ExcelRow = string[];
 
 export interface ExcelReadOptions {
   sheetName?: string;
@@ -80,7 +78,7 @@ export const excelReaderProvider: Provider = {
       try {
         const response = await sheets.spreadsheets.values.update({
           spreadsheetId: spreadSheetId,
-          range: `시트1!C${targetRow + 2}:G${targetRow + 2}`,
+          range: `시트1!C${targetRow + 2}:H${targetRow + 2}`,
           valueInputOption: 'USER_ENTERED',
           requestBody: {
             values: [args],
