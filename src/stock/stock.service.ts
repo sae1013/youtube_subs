@@ -5,7 +5,7 @@ import type { AxiosInstance } from 'axios';
 import type { ExcelReader } from '../common/excel/excel.provider';
 import { EXCEL_READER } from '../common/excel/excel.provider';
 import { createOptionMapperByValue } from './const/optionMapper';
-import { Country, DEFAULT_RANGE, ProductType } from '../common';
+import { DEFAULT_RANGE } from '../common';
 import { ProductConfigService } from '../product-config/product-config.service';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class StockService {
     // 각 로우 별로 파싱해서 object 키 값 형태로 내려준다.
     // ex) {100:3, 389:5 , 300: 7} 이런식으로, 옵션코드 : 잔여갯수
     const optionStockTable = rows.reduce((acc, cur) => {
-      const [value, _, useYn, optionCode] = cur as unknown as string[];
+      const [_, _, useYn, optionCode] = cur as unknown as string[];
       if ((useYn as unknown as string).toLowerCase() === 'n') {
         acc.set(optionCode, (acc.get(optionCode) ?? 0) + 1);
       }
@@ -46,38 +46,35 @@ export class StockService {
   async updateOptionStock() {
     // 모든 키를 반복해야한다.
     const S3ProdInfoByKey = this.productConfigService.getSnapshot();
-    Object.entries(S3ProdInfoByKey).forEach(([key, productObj]) => {
-      // !TODO 앞에 반복문 추가해서 매아이템마다 모두 돌 수 있도록 수정하기.
-      const spreadSheetId: string = productObj['spreadsheetId'];
-      const optionStockTable = await this.getStockByOptions(); // spreadSheetId, option 넣어주기.
-      const productType = this.configService.get('PRODUCT_TYPE') as ProductType;
-      const country = this.configService.get('COUNTRY') as Country<
-        typeof productType
-      >;
-      // 1) 해당 상품/국가에 대한 옵션 리스트 가져오기
-      const optionCombinations =
-        this.productConfigService.getOptionCombinations(productType, country); // 재고 맵
 
-      const optionMapperByValue = createOptionMapperByValue(optionCombinations);
-      const originalProductId = this.productConfigService.getOriginalProductId(
-        productType,
-        country,
-      );
+    for (const [key, productObj] of Object.entries(S3ProdInfoByKey)) {
+      // 상품마다 spreadid가다름
+      const spreadSheetId: string = productObj['spreadsheetId'];
+      const optionStockTable = await this.getStockByOptions(spreadSheetId, {
+        range: DEFAULT_RANGE,
+      });
+
+      // 1) 해당 상품/국가에 대한 옵션 리스트 가져오기
+      const optionCombinations = productObj['option_combinations']; // 옵션 별 객체 배열
+
+      // optionMapperByValue
+      const optionMapperByCodeMap =
+        createOptionMapperByValue(optionCombinations); // optionCombinations가 배열에서 {}
+
+      const originalProductId = productObj['originalProdId'];
 
       const bodyParam = {
         productSalePrice: {
-          salePrice: this.productConfigService.getBasePrice(
-            productType,
-            country,
-          ),
+          salePrice: productObj['base_price'],
         },
         optionInfo: {
           optionCombinations: Array.from(optionStockTable).map(([k, v]) => {
             return {
-              id: optionMapperByValue[k as keyof typeof optionMapperByValue].id,
+              id: optionMapperByCodeMap[k as keyof typeof optionMapperByCodeMap]
+                .id,
               stockQuantity: v,
               price:
-                optionMapperByValue[k as keyof typeof optionMapperByValue]
+                optionMapperByCodeMap[k as keyof typeof optionMapperByCodeMap]
                   ?.price,
               usable: true,
             };
@@ -99,6 +96,6 @@ export class StockService {
       } catch (e) {
         console.log(e);
       }
-    });
+    }
   }
 }

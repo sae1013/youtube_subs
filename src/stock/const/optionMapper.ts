@@ -141,12 +141,13 @@ export const BASE_PRICE: ByProdCountry<number> = {
 //   },
 // };
 
+// 해당하는 조합에서 가격 : 현재 객체 붙여서 리턴
 export function createOptionMapperByValue(
   combinations: OptionCombination[],
 ): Record<string, OptionCombination> {
   return combinations.reduce(
     (acc, cur) => {
-      acc[cur.optionValue] = cur;
+      acc[cur.optionMgCd] = cur;
       return acc;
     },
     {} as Record<string, OptionCombination>,

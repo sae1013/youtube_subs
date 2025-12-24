@@ -19,7 +19,6 @@ import { GMAIL_MAILER } from 'src/common/email/gmail.provider';
 import * as crypto from 'crypto';
 import { Country, DEFAULT_RANGE, ProductType } from '../common';
 import { ProductConfigService } from '../product-config/product-config.service';
-import { EXCEL_URL_BY_PROD_COUNTRY } from '../common/excel/variables';
 
 type S3ProdInfoByKeyMap = Record<string, any>;
 
@@ -90,7 +89,7 @@ export class OrdersService {
         const targetRowIdx = rows.findIndex((row) => {
           const redeemCd = row[1]; // 코드
           const useYn = row[2]; // 사용여부
-          const rowOptionCode = row[3]; // 옵션 아이디 , 기존에는 이메일 이었는데 한칸 미루기
+          const rowOptionCode = row[3]; // 옵션 아이디
 
           // 주문들어온 옵션과 타겟의 옵션코드를보고 사용n이면 리턴
           return (

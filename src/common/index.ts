@@ -19,4 +19,4 @@ export type ByProdCountry<T> = {
   };
 };
 
-export const DEFAULT_RANGE = '시트1!A2:C';
+export const DEFAULT_RANGE = '시트1!A2:D';

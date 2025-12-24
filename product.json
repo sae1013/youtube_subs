@@ -15,7 +15,7 @@
         "usable": true,
         "optionValue": "100",
         "optionName1": "100 루피",
-        "optionMgCd": "option1"
+        "optionMgCd": "100"
       },
       {
         "id": 53712097199,
@@ -24,7 +24,7 @@
         "price": 2370,
         "usable": true,
         "optionName1": "195 루피",
-        "optionMgCd": "option2"
+        "optionMgCd": "195"
       },
       {
         "id": 53712097200,
@@ -33,7 +33,7 @@
         "price": 7200,
         "usable": true,
         "optionName1": "389 루피",
-        "optionMgCd": "option3"
+        "optionMgCd": "389"
       },
       {
         "id": 53712097201,
@@ -42,7 +42,7 @@
         "price": 12000,
         "usable": true,
         "optionName1": "585 루피",
-        "optionMgCd": "option4"
+        "optionMgCd": "585"
       },
       {
         "id": 54254624005,
@@ -51,7 +51,7 @@
         "usable": true,
         "optionValue": "1000",
         "optionName1": "1000 루피",
-        "optionMgCd": "option7"
+        "optionMgCd": "1000"
       },
       {
         "id": 54436350097,
