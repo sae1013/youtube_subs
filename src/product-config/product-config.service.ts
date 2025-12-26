@@ -35,7 +35,6 @@ export class ProductConfigService implements OnModuleInit {
         timeout: 30000,
       });
       const data = response.data;
-
       this.snapshot = data;
     } catch (error) {
       this.logger.error(

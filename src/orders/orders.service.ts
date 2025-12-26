@@ -19,14 +19,11 @@ import * as crypto from 'crypto';
 import { Country, DEFAULT_RANGE, ProductType } from '../common';
 import { ProductConfigService } from '../product-config/product-config.service';
 
-type S3ProdInfoByKeyMap = Record<string, any>;
-
 @Injectable()
 export class OrdersService {
   ADMIN_EMAIL_ADDR = 'sae1013@gmail.com';
   private readonly prodType: ProductType;
   private readonly country: Country<typeof this.prodType>;
-  private readonly S3ProdInfoByKey: S3ProdInfoByKeyMap;
 
   constructor(
     private readonly configService: ConfigService,
@@ -34,9 +31,7 @@ export class OrdersService {
     @Inject(AXIOS_INSTANCE) private readonly http: AxiosInstance,
     @Inject(EXCEL_READER) private readonly excelReader: ExcelReader,
     @Inject(GMAIL_MAILER) private readonly gmailMailer: GmailMailer,
-  ) {
-    this.S3ProdInfoByKey = this.productConfigService.getSnapshot();
-  }
+  ) {}
 
   /**
    * 자동화의 시작지점
@@ -44,7 +39,7 @@ export class OrdersService {
   async processOrders() {
     // 배송처리할 상품목록. 메일전송에 성공하면 채워넣는다.
     const productOrderIdList: string[] = [];
-
+    const S3ProdInfoByKey = this.productConfigService.getSnapshot();
     // STEP 1
     // 최근 결제된 주문 ID 배열을 가져온다
     const paidOrderIds = await this.findLastChangedPaidOrders();
@@ -73,10 +68,10 @@ export class OrdersService {
       } = orderInfo.productOrder;
 
       //TODO: 금액 , 단위 따로 뽑아오기
-      const unit = this.S3ProdInfoByKey[originalProductId]?.unit;
+      const unit = S3ProdInfoByKey[originalProductId]?.unit;
 
       const spreadsheetId =
-        this.S3ProdInfoByKey[originalProductId]?.spreadsheetId || '';
+        S3ProdInfoByKey[originalProductId]?.spreadsheetId || '';
 
       // 주문갯수에따라 순회
       for (let i = 0; i < quantity; i++) {
@@ -88,7 +83,7 @@ export class OrdersService {
         const targetRowIdx = rows.findIndex((row) => {
           const redeemCd = row[1]; // 코드
           const useYn = row[2]; // 사용여부
-          const rowOptionCode = row[3]; // 옵션 아이디
+          const rowOptionCode = row[3]; // 옵션 코드
 
           // 주문들어온 옵션과 타겟의 옵션코드를보고 사용n이면 리턴
           return (
