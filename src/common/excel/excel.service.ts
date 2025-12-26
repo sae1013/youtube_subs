@@ -10,7 +10,7 @@ export class ExcelService {
   ) {}
 
   async readFile() {
-    const rows = await this.excelReader.readRows();
+    const rows = await this.excelReader.readRows('test', {});
     console.log(rows);
   }
 }

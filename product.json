@@ -1,15 +1,15 @@
 {
-  "12650488610": {
+  "12816839431": {
     "name": "앱스토어 인도 기프트카드",
     "spreadsheetId": "1QHdgdW6bAVw6EDcTC3odAeVSyq9vONBPJU47-pMwt-8",
-    "originalProdId": 12650488610,
+    "originalProdId": 12816839431,
     "isGroupProd": false,
     "base_price": 3000,
     "discount": 500,
     "unit": "루피",
     "option_combinations": [
       {
-        "id": 53712097198,
+        "id": 54707066662,
         "stockQuantity": 100,
         "price": 0,
         "usable": true,
@@ -18,7 +18,7 @@
         "optionMgCd": "100"
       },
       {
-        "id": 53712097199,
+        "id": 54707066664,
         "stockQuantity": 9,
         "optionValue": "195",
         "price": 2370,
@@ -27,7 +27,7 @@
         "optionMgCd": "195"
       },
       {
-        "id": 53712097200,
+        "id": 54707066667,
         "stockQuantity": 4,
         "optionValue": "389",
         "price": 7200,
@@ -36,7 +36,7 @@
         "optionMgCd": "389"
       },
       {
-        "id": 53712097201,
+        "id": 54707066669,
         "stockQuantity": 6,
         "optionValue": "585",
         "price": 12000,
@@ -45,7 +45,7 @@
         "optionMgCd": "585"
       },
       {
-        "id": 54254624005,
+        "id": 54707066671,
         "stockQuantity": 10,
         "price": 19500,
         "usable": true,
@@ -54,75 +54,75 @@
         "optionMgCd": "1000"
       },
       {
-        "id": 54436350097,
+        "id": 54707066673,
         "stockQuantity": 5,
         "optionValue": "1170",
         "price": 23200,
         "usable": true,
         "optionName1": "1170 루피",
-        "optionMgCd": "option5"
+        "optionMgCd": "1170"
       },
       {
-        "id": 54254624006,
+        "id": 54707066675,
         "stockQuantity": 5,
         "price": 41500,
         "usable": true,
         "optionValue": "2000",
         "optionName1": "2000 루피",
-        "optionMgCd": "option8"
+        "optionMgCd": "2000"
       },
       {
-        "id": 54429911185,
+        "id": 54707066676,
         "stockQuantity": 2,
         "price": 49000,
         "optionValue": "2340",
         "usable": true,
         "optionName1": "2340 루피",
-        "optionMgCd": "option6"
+        "optionMgCd": "2340"
       },
       {
-        "id": 54348085853,
+        "id": 54707066677,
         "stockQuantity": 3,
         "price": 50600,
         "usable": true,
         "optionValue": "2500",
         "optionName1": "2500 루피",
-        "optionMgCd": "option9"
+        "optionMgCd": "2500"
       }
     ]
   },
-  "12752749402": {
+  "12816975136": {
     "name": "앱스토어 터키 기프트카드",
     "spreadsheetId": "1jL_0Yk3duNGNfOc21uP3GgioPVaEzxWet5p9Qp1MLB0",
-    "originalProdId": 12752749402,
+    "originalProdId": 12816975136,
     "isGroupProd": false,
     "base_price": 4400,
     "discount": 0,
     "unit": "리라",
     "option_combinations": [
       {
-        "id": 54350439805,
+        "id": 54707695428,
         "price": 0,
         "usable": true,
         "optionValue": "100",
         "optionName1": "100 리라",
-        "optionMgCd": "option1"
+        "optionMgCd": "100"
       },
       {
-        "id": 54350439807,
-        "price": 17600,
+        "id": 54707695429,
+        "price": 17100,
         "usable": true,
         "optionValue": "500",
         "optionName1": "500 리라",
-        "optionMgCd": "option2"
+        "optionMgCd": "500"
       },
       {
-        "id": 54350439809,
+        "id": 54707695430,
         "price": 39500,
         "usable": true,
         "optionValue": "1000",
         "optionName1": "1000 리라",
-        "optionMgCd": "option3"
+        "optionMgCd": "1000"
       }
     ]
   }

@@ -7,10 +7,10 @@ import { StockService } from './stock.service';
 export class StockController {
   constructor(private readonly stockService: StockService) {}
 
-  @Get('/stocks')
-  getStock() {
-    this.stockService.getStockByOptions();
-  }
+  // @Get('/stocks')
+  // getStock() {
+  //   this.stockService.getStockByOptions();
+  // }
 
   @Get('/stocks/update-option')
   updateStock() {

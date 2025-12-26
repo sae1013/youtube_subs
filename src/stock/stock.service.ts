@@ -23,7 +23,7 @@ export class StockService {
     // 각 로우 별로 파싱해서 object 키 값 형태로 내려준다.
     // ex) {100:3, 389:5 , 300: 7} 이런식으로, 옵션코드 : 잔여갯수
     const optionStockTable = rows.reduce((acc, cur) => {
-      const [_, _, useYn, optionCode] = cur as unknown as string[];
+      const [_a, _b, useYn, optionCode] = cur as unknown as string[];
       if ((useYn as unknown as string).toLowerCase() === 'n') {
         acc.set(optionCode, (acc.get(optionCode) ?? 0) + 1);
       }

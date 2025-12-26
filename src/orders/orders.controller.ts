@@ -8,7 +8,7 @@ export class OrdersController {
   @Get('/orders/last-changed-orders')
   async findAll() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    await this.ordersService.findLastChangedOrders();
+    await this.ordersService.findLastChangedPaidOrders();
     return {
       data: {
         msg: 'success',

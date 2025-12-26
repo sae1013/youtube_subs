@@ -1,13 +1,8 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import {
-  BASE_PRICE as DEFAULT_BASE_PRICE,
-  OPTION_COMBINATIONS as DEFAULT_OPTION_COMBINATIONS,
-  ORIGINAL_PRODUCT_ID as DEFAULT_ORIGINAL_PRODUCT_ID,
-  OptionCombination,
-} from '../stock/const/optionMapper';
-import { ByProdCountry, Country, ProductType } from '../common';
+import { OptionCombination } from '../stock/const/optionMapper';
+import { ByProdCountry } from '../common';
 
 type ProductConfigShape = {
   ORIGINAL_PRODUCT_ID: ByProdCountry<number>;
@@ -21,12 +16,7 @@ export class ProductConfigService implements OnModuleInit {
   private readonly logger = new Logger(ProductConfigService.name);
 
   // Keep a local snapshot so everything reads the same cached object.
-  private snapshot: ProductConfigShape = {
-    PRODUCT_BY_KEY: 1232424,
-    ORIGINAL_PRODUCT_ID: DEFAULT_ORIGINAL_PRODUCT_ID,
-    BASE_PRICE: DEFAULT_BASE_PRICE,
-    OPTION_COMBINATIONS: DEFAULT_OPTION_COMBINATIONS,
-  };
+  private snapshot: any = {};
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -55,28 +45,29 @@ export class ProductConfigService implements OnModuleInit {
     }
   }
 
-  getOriginalProductId<P extends ProductType, C extends Country<P>>(
-    productType: P,
-    country: C,
-  ): number {
-    return this.snapshot.ORIGINAL_PRODUCT_ID[productType][country];
-  }
-
-  getBasePrice<P extends ProductType, C extends Country<P>>(
-    productType: P,
-    country: C,
-  ): number {
-    return this.snapshot.BASE_PRICE[productType][country];
-  }
-
-  getOptionCombinations<P extends ProductType, C extends Country<P>>(
-    productType: P,
-    country: C,
-  ): OptionCombination[] {
-    return this.snapshot.OPTION_COMBINATIONS[productType][country];
-  }
+  // getOriginalProductId<P extends ProductType, C extends Country<P>>(
+  //   productType: P,
+  //   country: C,
+  // ): number {
+  //   return this.snapshot.ORIGINAL_PRODUCT_ID[productType][country];
+  // }
+  //
+  // getBasePrice<P extends ProductType, C extends Country<P>>(
+  //   productType: P,
+  //   country: C,
+  // ): number {
+  //   return this.snapshot.BASE_PRICE[productType][country];
+  // }
+  //
+  // getOptionCombinations<P extends ProductType, C extends Country<P>>(
+  //   productType: P,
+  //   country: C,
+  // ): OptionCombination[] {
+  //   return this.snapshot.OPTION_COMBINATIONS[productType][country];
+  // }
 
   getSnapshot(): ProductConfigShape {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.snapshot;
   }
 }

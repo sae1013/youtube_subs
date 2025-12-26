@@ -13,7 +13,6 @@ import {
   SmartstoreResponse,
   OrderInfo,
 } from './types';
-import { getProdAndCountryByString, parseProductOption } from '../common/utils';
 import { GMAIL_MAILER } from 'src/common/email/gmail.provider';
 // import { genHtmlTemplate } from 'src/common/email/templates/template1';
 import * as crypto from 'crypto';
@@ -27,16 +26,16 @@ export class OrdersService {
   ADMIN_EMAIL_ADDR = 'sae1013@gmail.com';
   private readonly prodType: ProductType;
   private readonly country: Country<typeof this.prodType>;
+  private readonly S3ProdInfoByKey: S3ProdInfoByKeyMap;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly productConfigService: ProductConfigService,
-    private readonly S3ProdInfoByKey: S3ProdInfoByKeyMap,
     @Inject(AXIOS_INSTANCE) private readonly http: AxiosInstance,
     @Inject(EXCEL_READER) private readonly excelReader: ExcelReader,
     @Inject(GMAIL_MAILER) private readonly gmailMailer: GmailMailer,
   ) {
-    this.S3ProdInfoByKey = productConfigService.getSnapshot();
+    this.S3ProdInfoByKey = this.productConfigService.getSnapshot();
   }
 
   /**
