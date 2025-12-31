@@ -30,22 +30,22 @@ export const getEmailTemplate = (data) => {
                         <tr>
                           <td style="vertical-align:middle;padding-right:10px;">
                             <!-- YouTube play-ish icon -->
-                            <div
-                              style="
-                                width:44px;height:30px;border-radius:9px;
-                                background:#ff0033;
-                                box-shadow:0 10px 26px rgba(255,0,51,.35);
-                                position:relative;
-                              "
-                            >
-                              <div
-                                style="
-                                  position:absolute;left:17px;top:7px;
-                                  width:0;height:0;border-top:8px solid transparent;
-                                  border-bottom:8px solid transparent;border-left:12px solid #ffffff;
-                                "
-                              ></div>
-                            </div>
+<!--                            <div-->
+<!--                              style="-->
+<!--                                width:44px;height:30px;border-radius:9px;-->
+<!--                                background:#ff0033;-->
+<!--                                box-shadow:0 10px 26px rgba(255,0,51,.35);-->
+<!--                                position:relative;-->
+<!--                              "-->
+<!--                            >-->
+<!--                              <div-->
+<!--                                style="-->
+<!--                                  position:absolute;left:17px;top:7px;-->
+<!--                                  width:0;height:0;border-top:8px solid transparent;-->
+<!--                                  border-bottom:8px solid transparent;border-left:12px solid #ffffff;-->
+<!--                                "-->
+<!--                              ></div>-->
+<!--                            </div>-->
                           </td>
                           <td style="vertical-align:middle;">
                             <div style="font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:20px;color:#ffffff;font-weight:700;">
@@ -120,7 +120,7 @@ export const getEmailTemplate = (data) => {
                             </div>
                             <div style="font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:24px;color:#ffffff;font-weight:800;">
                               <!-- ✅ 여기 값 주입 -->
-                              {{expireText}}
+                              ${data.expireDate}
                             </div>
                           </td>
 
@@ -140,11 +140,7 @@ export const getEmailTemplate = (data) => {
                               "
                             >
                               <!-- ✅ 여기 값 주입 -->
-                              {{statusText}}
-                            </div>
-                            <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:16px;color:#b3b3b3;margin-top:6px;">
-                              <!-- ✅ 여기 값 주입 -->
-                              {{reasonText}}
+                              ${data.reason}
                             </div>
                           </td>
                         </tr>
@@ -172,7 +168,7 @@ export const getEmailTemplate = (data) => {
                         입금계좌
                       </div>
                       <div style="font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:24px;color:#ffffff;font-weight:900;letter-spacing:.3px;">
-                        3333-0600-31134
+                        3333-06-0031134
                       </div>
 
                       <div style="height:10px;line-height:10px;font-size:0;">&nbsp;</div>
@@ -204,54 +200,19 @@ export const getEmailTemplate = (data) => {
                   <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#d6d6d6;margin:0;">
                     ✅ 입금 시 <b style="color:#ffffff;">본인의 닉네임</b>으로 입금해주시면 확인이 빠릅니다.<br />
                     ✅ <b style="color:#ffffff;">본명</b>으로 입금하실 경우, 입금 후 별도로 알려주시면 감사드리겠습니다.
+                    ✅ <b style="color:#ffffff;">연락처: </b>01086729221
                   </div>
                 </div>
-
-                <!-- CTA -->
-                <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                  <tr>
-                    <td
-                      style="
-                        background:#ff0033;
-                        border-radius:12px;
-                        box-shadow:0 14px 30px rgba(255,0,51,.30);
-                      "
-                    >
-                      <!-- 버튼 링크는 필요하면 바꿔 -->
-                      <a
-                        href="{{ctaLink}}"
-                        style="
-                          display:inline-block;
-                          padding:12px 16px;
-                          font-family:Arial,Helvetica,sans-serif;
-                          font-size:14px;line-height:18px;
-                          color:#ffffff;
-                          text-decoration:none;
-                          font-weight:800;
-                        "
-                      >
-                        입금 완료/문의하기 →
-                      </a>
-                    </td>
-                    <td style="padding-left:10px;">
-                      <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:16px;color:#b3b3b3;">
-                        링크가 없으면 버튼을 제거해도 돼요
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+                
 
                 <div style="height:18px;line-height:18px;font-size:0;">&nbsp;</div>
 
-                <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#d6d6d6;">
-                  좋은 하루 되세요~^^
-                </div>
+                
 
                 <!-- Footer -->
                 <div style="height:16px;line-height:16px;font-size:0;">&nbsp;</div>
                 <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:16px;color:#8e8e8e;">
                   본 메일은 안내 목적이며, 결제/구독은 사용자 요청에 따라 처리됩니다.<br />
-                  © {{year}} Premium Notice
                 </div>
               </td>
             </tr>

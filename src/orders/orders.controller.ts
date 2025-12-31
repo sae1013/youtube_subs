@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Header } from '@nestjs/common';
 import { OrdersService } from './orders.service';
+import { getEmailTemplate } from './emailtemplate';
 
 @Controller()
 export class OrdersController {
@@ -42,15 +43,22 @@ export class OrdersController {
     return 200;
   }
 
-  @Get('email')
-  sendEmail() {
+  @Get('youtube-email')
+  async sendEmail() {
     const receiver = 'sae1013@gmail.com';
-    const template = 'receiverreceiverreceiverreceiver';
-    this.ordersService.sendEmail(receiver, template);
+    const template = getEmailTemplate({ name: 'minwoo' });
+    return await this.ordersService.sendEmail(receiver, template);
   }
 
   @Get('youtube-alert')
+  @Header('content-type', 'text/html; charset=utf-8')
   sendYoutubeAlert() {
     this.ordersService.sendYoutubeAlert();
   }
+
+  // @Get("youtube-page")
+  // @Header('content-type', 'text/html; charset=utf-8')
+  // page(){
+  //   return
+  // }
 }
