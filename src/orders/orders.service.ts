@@ -109,24 +109,22 @@ export class OrdersService {
         /**
          * 대고객 문자/메일발송입니다. 아래 주석은 유의해주세요.
          */
-        if (isSMS) {
-          const response = await this.sendSMS(contact, textMessage);
-        } else {
-          const response = await this.gmailMailer.send({
-            to: contact,
-            subject: '유튜브 프리미엄 갱신안내',
-            html: emailMessage,
-            from: 'sae1013@gmail.com',
-          });
-        }
+        // if (isSMS) {
+        //   const response = await this.sendSMS(contact, textMessage);
+        // } else {
+        //   const response = await this.gmailMailer.send({
+        //     to: contact,
+        //     subject: '유튜브 프리미엄 갱신안내',
+        //     html: emailMessage,
+        //     from: 'sae1013@gmail.com',
+        //   });
+        // }
       } catch (err) {
         // 필요하면 err 로그
         console.log(err?.message ?? err);
-      } finally {
-        console.log(targetUser);
       }
     }
-
+    console.log(targetUser);
     return 200;
   }
 
